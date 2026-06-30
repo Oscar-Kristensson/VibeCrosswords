@@ -9,7 +9,7 @@
   // Demonstrates the "hint with a 90° bend" feature: the hint sits to the
   // left of the first letter, and the word then reads downward — exactly
   // like the classic Scandinavian-style crossword convention.
-  State.resetGrid(12, 12);
+  State.resetGrid(18, 25);
   Words.addWord({ direction: 'down', col: 1, row: 0, word: 'ORD', hint: 'Vad du fyller i', hintSide: 'left' });
   Words.addWord({ direction: 'across', col: 3, row: 2, word: 'KRYSS', hint: 'Ord-pussel', hintSide: 'up' });
 

@@ -7,8 +7,8 @@
 const State = (() => {
   const _state = {
     // Grid dimensions
-    width: 12,
-    height: 12,
+    width: 18,
+    height: 25,
 
     // Design settings
     settings: {
