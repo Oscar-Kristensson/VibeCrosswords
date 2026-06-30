@@ -16,7 +16,7 @@ const State = (() => {
       letterFontSize: 18,
       fontFamily:     "'Helvetica Neue', sans-serif",
       blockedColor:   '#b0b0b0',
-      hintBg:         '#fffbe6',
+      hintBg:         '#d4d4d4',
       hintColor:      '#222222',
       lineColor:      '#333333',
       letterColor:    '#1a1a2e',

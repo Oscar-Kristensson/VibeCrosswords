@@ -23,7 +23,7 @@
   --letter-size:   18px;
 
   --toolbar-h:     52px;
-  --panel-w:       430px;
+  --panel-w:       530px;
   --radius:        4px;
 }
 
@@ -297,7 +297,7 @@ html, body {
 /* Each word entry row */
 .word-entry {
   display: grid;
-  grid-template-columns: 48px 40px 40px 1fr 1fr 70px 28px;
+  grid-template-columns: 48px 40px 40px 1fr 2fr 70px 28px;
   gap: 4px;
   align-items: center;
   padding: 4px 2px;
