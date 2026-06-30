@@ -1,4 +1,4 @@
-# Revised Crossword Builder
+# VibeCrosswords
 
 A web-based authoring tool for creating Scandinavian-style crosswords. In Scandinavian crosswords, clues are placed directly inside the grid ("hint cells") rather than in an external numbered list, creating a seamless and visually distinct puzzle experience.
 
