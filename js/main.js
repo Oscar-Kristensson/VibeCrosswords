@@ -6,10 +6,12 @@
 
 (function init() {
   // Seed a small example so the grid isn't empty on first load.
+  // Demonstrates the "hint with a 90° bend" feature: the hint sits to the
+  // left of the first letter, and the word then reads downward — exactly
+  // like the classic Scandinavian-style crossword convention.
   State.resetGrid(12, 12);
-  Words.addWord({ direction: 'across', col: 1, row: 1, word: 'KRYSS', hint: 'Ord-pussel' });
-  Words.addWord({ direction: 'down',   col: 3, row: 0, word: 'ORD',   hint: 'Vad du fyller i' });
-  State.setArrow(1, 1, { anchor: 'BR', direction: 'right' });
+  Words.addWord({ direction: 'down', col: 1, row: 0, word: 'ORD', hint: 'Vad du fyller i', hintSide: 'left' });
+  Words.addWord({ direction: 'across', col: 3, row: 2, word: 'KRYSS', hint: 'Ord-pussel', hintSide: 'up' });
 
   Grid.render();
   Words.renderList();

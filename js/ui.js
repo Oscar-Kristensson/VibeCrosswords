@@ -162,7 +162,7 @@ const UI = (() => {
 
       Serialiser.load(file, (success, err) => {
         if (success) {
-          Grid.render();
+          Words.rebuildGridFromWords(); // recompute cells/arrows from words (handles legacy file migration too)
           Words.renderList();
           showToast('Crossword loaded');
         } else {
@@ -180,9 +180,9 @@ const UI = (() => {
     });
   }
 
-  // ── Hint cell double-click -> auto add word entry ────────────────────────
-  function initHintDblClick() {
-    Grid.setHintDblClickHandler((col, row) => {
+  // ── Empty cell double-click -> auto add word entry ───────────────────────
+  function initEmptyCellDblClick() {
+    Grid.setEmptyCellDblClickHandler((col, row) => {
       // If a word already starts exactly here, just focus it instead of duplicating.
       const existing = State.words.find(w => w.col === col && w.row === row);
       if (existing) {
@@ -190,7 +190,7 @@ const UI = (() => {
         return;
       }
       Words.addWordAtCoordinate(col, row);
-      showToast(`New word entry added at (${col + 1}, ${row + 1})`);
+      showToast(`New word started at (${col + 1}, ${row + 1})`);
     });
   }
 
@@ -200,7 +200,7 @@ const UI = (() => {
     initExportModal();
     initSaveLoad();
     initAddWord();
-    initHintDblClick();
+    initEmptyCellDblClick();
   }
 
   return { init, showToast, confirmDialog };

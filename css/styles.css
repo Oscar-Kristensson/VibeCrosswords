@@ -23,7 +23,7 @@
   --letter-size:   18px;
 
   --toolbar-h:     52px;
-  --panel-w:       380px;
+  --panel-w:       430px;
   --radius:        4px;
 }
 
@@ -276,7 +276,7 @@ html, body {
 /* Column label row */
 .word-panel-labels {
   display: grid;
-  grid-template-columns: 48px 44px 44px 1fr 1fr 28px;
+  grid-template-columns: 48px 40px 40px 1fr 1fr 70px 28px;
   gap: 4px;
   padding: 6px 10px 4px;
   border-bottom: 1px solid #eee;
@@ -297,7 +297,7 @@ html, body {
 /* Each word entry row */
 .word-entry {
   display: grid;
-  grid-template-columns: 48px 44px 44px 1fr 1fr 28px;
+  grid-template-columns: 48px 40px 40px 1fr 1fr 70px 28px;
   gap: 4px;
   align-items: center;
   padding: 4px 2px;
@@ -338,6 +338,7 @@ html, body {
 }
 
 .we-dir select { font-size: .8rem; }
+.we-side select { font-size: .76rem; }
 
 .we-del {
   display: flex;

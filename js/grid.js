@@ -20,7 +20,7 @@ const Grid = (() => {
 
   let arrowModeActive = false;
   let onCellArrowClick = null; // callback(col,row,clientX,clientY) set by arrows.js
-  let onHintCellDblClick = null; // callback(col,row) set by ui.js (auto-add word entry)
+  let onEmptyCellDblClick = null; // callback(col,row) set by ui.js (auto-add word entry)
 
   function setArrowMode(active) {
     arrowModeActive = active;
@@ -28,7 +28,7 @@ const Grid = (() => {
   }
 
   function setArrowClickHandler(fn) { onCellArrowClick = fn; }
-  function setHintDblClickHandler(fn) { onHintCellDblClick = fn; }
+  function setEmptyCellDblClickHandler(fn) { onEmptyCellDblClick = fn; }
 
   function applyCssVars(cellSize) {
     const s = State.settings;
@@ -140,8 +140,11 @@ const Grid = (() => {
     div.addEventListener('dblclick', () => {
       if (arrowModeActive) return;
       const cur = State.getCell(col, row);
-      if (cur.state === 'hint' && onHintCellDblClick) {
-        onHintCellDblClick(col, row);
+      // Double-clicking an empty cell starts a new word with its first letter
+      // here. (Hint cells are now derived from a word's hintSide, so they're
+      // not directly editable targets themselves.)
+      if (cur.state === 'empty' && onEmptyCellDblClick) {
+        onEmptyCellDblClick(col, row);
       }
     });
 
@@ -183,7 +186,7 @@ const Grid = (() => {
     render,
     setArrowMode,
     setArrowClickHandler,
-    setHintDblClickHandler,
+    setEmptyCellDblClickHandler,
     renderArrowSVG,
     REFERENCE_CELL_PX,
   };
