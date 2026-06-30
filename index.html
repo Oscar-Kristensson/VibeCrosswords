@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crossword Builder</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- TOOLBAR -->
+  <header class="toolbar">
+    <div class="toolbar-brand">✦ Kryss</div>
+    <div class="toolbar-actions">
+      <button id="btn-design" class="btn btn-ghost" title="Design settings">⚙ Design</button>
+      <button id="btn-arrow-mode" class="btn btn-ghost" title="Place directional arrows">↗ Arrows</button>
+      <div class="toolbar-sep"></div>
+      <button id="btn-save" class="btn btn-ghost" title="Save crossword as JSON">💾 Save</button>
+      <label class="btn btn-ghost" title="Load crossword from JSON">
+        📂 Load
+        <input type="file" id="file-load" accept=".json" style="display:none" />
+      </label>
+      <button id="btn-export" class="btn btn-primary" title="Export to PDF">📄 Export PDF</button>
+    </div>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <main class="app-body">
+
+    <!-- GRID AREA -->
+    <section class="grid-section">
+      <div class="grid-wrapper">
+        <div id="grid-col-headers" class="grid-col-headers"></div>
+        <div class="grid-row-wrapper">
+          <div id="grid-row-headers" class="grid-row-headers"></div>
+          <div id="crossword-grid" class="crossword-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORD PANEL -->
+    <aside class="word-panel">
+      <div class="word-panel-header">
+        <h2>Words</h2>
+        <button id="btn-add-word" class="btn btn-primary btn-sm">+ Add word</button>
+      </div>
+      <div class="word-panel-labels">
+        <span class="wl-dir">Dir</span>
+        <span class="wl-col">Col</span>
+        <span class="wl-row">Row</span>
+        <span class="wl-word">Word</span>
+        <span class="wl-hint">Hint</span>
+        <span class="wl-del"></span>
+      </div>
+      <div id="word-list" class="word-list"></div>
+    </aside>
+  </main>
+
+  <!-- DESIGN SETTINGS MODAL -->
+  <div id="modal-design" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Design Settings</h3>
+        <button class="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <fieldset>
+          <legend>Grid</legend>
+          <label>Width (cols) <input type="number" id="cfg-width" min="3" max="30" value="12" /></label>
+          <label>Height (rows) <input type="number" id="cfg-height" min="3" max="30" value="12" /></label>
+          <p class="cfg-note">Changing dimensions clears all content.</p>
+          <button id="btn-apply-size" class="btn btn-primary btn-sm">Apply dimensions</button>
+        </fieldset>
+        <fieldset>
+          <legend>Typography</legend>
+          <label>Hint font size (px) <input type="number" id="cfg-hint-size" min="6" max="20" value="9" /></label>
+          <label>Letter font size (px) <input type="number" id="cfg-letter-size" min="10" max="40" value="18" /></label>
+          <label>Font family
+            <select id="cfg-font">
+              <option value="'Helvetica Neue', sans-serif">Helvetica / Sans</option>
+              <option value="Georgia, serif">Georgia / Serif</option>
+              <option value="'Courier New', monospace">Courier / Mono</option>
+            </select>
+          </label>
+        </fieldset>
+        <fieldset>
+          <legend>Colours</legend>
+          <label>Blocked cell <input type="color" id="cfg-blocked-color" value="#b0b0b0" /></label>
+          <label>Hint cell background <input type="color" id="cfg-hint-bg" value="#fffbe6" /></label>
+          <label>Hint cell text <input type="color" id="cfg-hint-color" value="#222222" /></label>
+          <label>Grid line <input type="color" id="cfg-line-color" value="#333333" /></label>
+          <label>Letter colour <input type="color" id="cfg-letter-color" value="#1a1a2e" /></label>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARROW PLACEMENT POPOVER -->
+  <div id="arrow-popover" class="arrow-popover hidden">
+    <div class="ap-title">Arrow</div>
+    <div class="ap-row">
+      <span class="ap-label">Position</span>
+      <div class="ap-radio-group" id="ap-anchor">
+        <label><input type="radio" name="ap-anchor" value="TL" checked /> TL</label>
+        <label><input type="radio" name="ap-anchor" value="TR" /> TR</label>
+        <label><input type="radio" name="ap-anchor" value="BL" /> BL</label>
+        <label><input type="radio" name="ap-anchor" value="BR" /> BR</label>
+      </div>
+    </div>
+    <div class="ap-row">
+      <span class="ap-label">Direction</span>
+      <div class="ap-radio-group" id="ap-direction">
+        <label><input type="radio" name="ap-dir" value="right" checked /> →</label>
+        <label><input type="radio" name="ap-dir" value="down" /> ↓</label>
+        <label><input type="radio" name="ap-dir" value="left" /> ←</label>
+        <label><input type="radio" name="ap-dir" value="up" /> ↑</label>
+      </div>
+    </div>
+    <div class="ap-actions">
+      <button id="ap-place" class="btn btn-primary btn-sm">Place</button>
+      <button id="ap-clear" class="btn btn-ghost btn-sm">Clear</button>
+      <button id="ap-cancel" class="btn btn-ghost btn-sm">Cancel</button>
+    </div>
+  </div>
+
+  <!-- EXPORT MODAL -->
+  <div id="modal-export" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-box modal-box-sm">
+      <div class="modal-header">
+        <h3>Export PDF</h3>
+        <button class="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <label class="checkbox-label">
+          <input type="checkbox" id="cfg-answer-key" checked />
+          Include answer key (page 2)
+        </label>
+        <label>Paper size
+          <select id="cfg-paper">
+            <option value="a4">A4</option>
+            <option value="letter">Letter</option>
+          </select>
+        </label>
+        <label>Orientation
+          <select id="cfg-orientation">
+            <option value="portrait">Portrait</option>
+            <option value="landscape">Landscape</option>
+          </select>
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-do-export" class="btn btn-primary">Export</button>
+        <button class="btn btn-ghost modal-close">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIRM MODAL -->
+  <div id="modal-confirm" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-box modal-box-sm">
+      <div class="modal-header">
+        <h3 id="confirm-title">Are you sure?</h3>
+        <button class="modal-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p id="confirm-message"></p>
+      </div>
+      <div class="modal-footer">
+        <button id="confirm-ok" class="btn btn-primary">OK</button>
+        <button class="btn btn-ghost modal-close">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATUS TOAST -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- SCRIPTS (order matters) -->
+  <script src="vendor/jspdf.umd.min.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/grid.js"></script>
+  <script src="js/words.js"></script>
+  <script src="js/arrows.js"></script>
+  <script src="js/pdf.js"></script>
+  <script src="js/serialiser.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
